@@ -1,13 +1,8 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
-
-val backendUrl =
-    gradleLocalProperties(rootDir, providers).getProperty("BACKEND_URL", "")
 
 android {
     namespace = "com.example.assignment4"
@@ -22,7 +17,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        resValue("string", "BACKEND_URL", "\"" + backendUrl + "\"")
     }
 
     buildTypes {
@@ -47,7 +41,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -62,6 +55,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
     implementation("androidx.navigation:navigation-compose:2.8.9")
 
     implementation("com.squareup.retrofit2:retrofit:2.11.0")

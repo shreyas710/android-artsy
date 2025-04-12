@@ -1,7 +1,6 @@
 package com.example.assignment4.home.presentation.home
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.navigation.NavController
 import com.example.assignment4.core.data.api.RetrofitInstance
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
+import androidx.core.net.toUri
 
 @ExperimentalMaterial3Api
 @Composable
@@ -45,7 +45,11 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start
                     ) {
-                        Text("Artist Search", style = MaterialTheme.typography.titleLarge)
+                        Text(
+                            "Artist Search",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = Color.Black
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -59,12 +63,14 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                         Icon(
                             Icons.Default.Search,
                             contentDescription = "Search",
+                            tint = Color.Black
                         )
                     }
                     IconButton(onClick = { /* Account action */ }) {
                         Icon(
                             Icons.Default.Person,
                             contentDescription = "Account",
+                            tint = Color.Black
                         )
                     }
                 }
@@ -86,7 +92,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 Text(
                     text = "01 April 2025",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.DarkGray,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
             Column(
@@ -96,13 +102,14 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(red = 236, green = 236, blue = 243)) // light gray
+                        .background(MaterialTheme.colorScheme.tertiary) // light gray
                         .padding(vertical = 5.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = "Favorites",
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 }
                 Spacer(modifier = Modifier.height(30.dp))
@@ -120,7 +127,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 TextButton(
                     onClick = {
                         val url = "https://www.artsy.net/"
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
                         context.startActivity(intent)
                     }, colors = ButtonDefaults.textButtonColors(
                         contentColor = Color.Black
@@ -130,6 +137,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                         "Powered by Artsy",
                         style = MaterialTheme.typography.bodyMedium,
                         fontStyle = FontStyle.Italic,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }

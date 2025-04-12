@@ -2,7 +2,6 @@ package com.example.assignment4.home.presentation.search
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -84,7 +84,8 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Search,
-                                    contentDescription = "Search"
+                                    contentDescription = "Search",
+                                    tint = Color.Black
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Box(
@@ -94,12 +95,14 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                                         Text(
                                             text = "Search Artists...",
                                             style = MaterialTheme.typography.titleLarge,
+                                            color = Color.Black
                                         )
                                     } else {
                                         Text(
                                             searchQuery,
                                             style = MaterialTheme.typography.titleLarge,
-                                            modifier = Modifier.padding(top = 10.dp)
+                                            modifier = Modifier.padding(top = 10.dp),
+                                            color = Color.Black
                                         )
                                     }
 
@@ -114,7 +117,8 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                                             }) {
                                                 Icon(
                                                     imageVector = Icons.Default.Clear,
-                                                    contentDescription = "Clear"
+                                                    contentDescription = "Clear",
+                                                    tint = Color.Black
                                                 )
                                             }
                                         }
