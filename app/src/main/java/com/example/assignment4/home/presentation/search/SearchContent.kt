@@ -34,7 +34,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.assignment4.home.data.models.Artist
+import com.example.assignment4.core.data.api.RetrofitInstance
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +46,13 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
     }
 
     var searchQuery by remember { mutableStateOf("") }
-    var artistList by remember { mutableStateOf<List<Artist>>(emptyList()) }
+
+    LaunchedEffect(searchQuery) {
+        if (searchQuery.length >= 3) {
+            val response = RetrofitInstance.api.getArtists(searchQuery)
+            sharedViewModel.artists.value = response
+        }
+    }
 
 
     Scaffold(
@@ -122,7 +128,7 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                 .padding(innerPadding)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                artistList.forEach { artist ->
+                sharedViewModel.artists.value.forEach { artist ->
                     Text(
                         text = artist.title,
                         style = MaterialTheme.typography.bodyLarge,
