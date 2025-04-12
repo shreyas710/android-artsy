@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.assignment4.core.data.api.RetrofitInstance
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
+import com.example.assignment4.home.presentation.artistCard.ArtistCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,11 +52,14 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
 
     LaunchedEffect(searchQuery) {
         if (searchQuery.length >= 3) {
-            val response = RetrofitInstance.api.getArtists(searchQuery)
-            sharedViewModel.artists.value = response
+            try {
+                val response = RetrofitInstance.api.getArtists(searchQuery)
+                sharedViewModel.artists.value = response
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
-
 
     Scaffold(
         topBar = {
@@ -102,7 +108,10 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
                                         if (searchQuery.isNotEmpty()) {
-                                            IconButton(onClick = { searchQuery = "" }) {
+                                            IconButton(onClick = {
+                                                searchQuery = ""
+                                                sharedViewModel.artists.value = emptyList()
+                                            }) {
                                                 Icon(
                                                     imageVector = Icons.Default.Clear,
                                                     contentDescription = "Clear"
@@ -120,20 +129,17 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
-        }
+        },
+        modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                sharedViewModel.artists.value.forEach { artist ->
-                    Text(
-                        text = artist.title,
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
+            LazyColumn(modifier = Modifier.padding(16.dp)) {
+                items(sharedViewModel.artists.value.size) { artistId ->
+                    ArtistCard(artist = sharedViewModel.artists.value[artistId])
                 }
             }
         }
