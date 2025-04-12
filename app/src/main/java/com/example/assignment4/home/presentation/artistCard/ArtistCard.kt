@@ -18,17 +18,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.assignment4.core.presentation.viewModel.SharedViewModel
 import com.example.assignment4.home.data.models.Artist
 
 @Composable
 fun ArtistCard(
+    navController: NavController,
+    sharedViewModel: SharedViewModel,
     artist: Artist,
 ) {
     Card(
+        onClick = {
+            sharedViewModel.selectedArtist.value = artist
+            navController.navigate("artistDetails")
+        },
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         modifier = Modifier
@@ -66,12 +75,12 @@ fun ArtistCard(
                         text = artist.title,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
                         modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = Color.Black
                     )
                     Icon(
                         imageVector = Icons.Default.ChevronRight,
                         contentDescription = "Details",
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = Color.Black
                     )
                 }
             }

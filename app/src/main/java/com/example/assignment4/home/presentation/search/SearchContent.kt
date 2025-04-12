@@ -143,7 +143,11 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
         ) {
             LazyColumn(modifier = Modifier.padding(16.dp)) {
                 items(sharedViewModel.artists.value.size) { artistId ->
-                    ArtistCard(artist = sharedViewModel.artists.value[artistId])
+                    ArtistCard(
+                        navController = navController,
+                        sharedViewModel = sharedViewModel,
+                        artist = sharedViewModel.artists.value[artistId]
+                    )
                 }
             }
         }

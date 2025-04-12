@@ -7,4 +7,5 @@ import com.example.assignment4.home.data.models.Artist
 class SharedViewModel : ViewModel() {
     var token = mutableStateOf<String?>(null)
     var artists = mutableStateOf<List<Artist>>(emptyList())
+    var selectedArtist = mutableStateOf<Artist?>(null)
 }
