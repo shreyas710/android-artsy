@@ -12,29 +12,88 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.assignment4.core.data.api.RetrofitInstance
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
 import androidx.core.net.toUri
+import com.example.assignment4.auth.data.models.Favorites
+import com.example.assignment4.auth.data.models.LoginResponse
+import com.example.assignment4.core.data.api.LoginDataStoreManager
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val context = LocalContext.current
 
+    val loginResponse by produceState<LoginResponse?>(initialValue = null, key1 = context) {
+        value = LoginDataStoreManager.getLoginResponse(context)
+    }
+    val coroutineScope = rememberCoroutineScope()
+
+    val (loading, setLoading) = remember { mutableStateOf(false) }
+
+    val today = LocalDate.now()
+    val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
+    val formattedDate = today.format(formatter)
+
     LaunchedEffect(Unit) {
+        setLoading(true)
+        sharedViewModel.userFavorite.value = emptyList<Favorites>()
         try {
-            RetrofitInstance.api.getXappToken()
+            RetrofitInstance.artsyApi.getXappToken()
             sharedViewModel.token.value = RetrofitInstance.cookieJar.getCookieValue("token")
+
+            sharedViewModel.user.value = loginResponse
+
+            sharedViewModel.user.value!!.favorites.forEach {
+                val response = RetrofitInstance.artsyApi.getArtist(it.id)
+                sharedViewModel.userFavorite.value = sharedViewModel.userFavorite.value + Favorites(
+                    artist = response,
+                    createdAt = it.createdAt
+                )
+            }
         } catch (e: Exception) {
             e.printStackTrace()
+        } finally {
+            setLoading(false)
         }
     }
+
+    fun formatTimeAgo(createdDate: Date): String {
+        val seconds = ((Date().time - createdDate.time) / 1000).toInt()
+
+        if (seconds < 60) {
+            return "$seconds second${if (seconds != 1) "s" else ""} ago"
+        }
+
+        val minutes = seconds / 60
+        if (minutes < 60) {
+            return "$minutes minute${if (minutes != 1) "s" else ""} ago"
+        }
+
+        val hours = minutes / 60
+        if (hours < 24) {
+            return "$hours hour${if (hours != 1) "s" else ""} ago"
+        }
+
+        val days = hours / 24
+        return "$days day${if (days != 1) "s" else ""} ago"
+    }
+
 
     Scaffold(
         topBar = {
@@ -66,7 +125,12 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             tint = Color.Black
                         )
                     }
-                    IconButton(onClick = { /* Account action */ }) {
+                    IconButton(onClick = {
+                        coroutineScope.launch {
+                            LoginDataStoreManager.clearLoginResponse(context)
+                            sharedViewModel.user.value = null
+                        }
+                    }) {
                         Icon(
                             Icons.Default.Person,
                             contentDescription = "Account",
@@ -77,72 +141,142 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            Row(
+        if (loading) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(top = 30.dp),
+                contentAlignment = Alignment.TopCenter
             ) {
-                Text(
-                    text = "01 April 2025",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
             }
+        } else {
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.tertiary) // light gray
-                        .padding(vertical = 5.dp),
-                    horizontalArrangement = Arrangement.Center
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = "Favorites",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onTertiary
-                    )
-                }
-                Spacer(modifier = Modifier.height(30.dp))
-                Button(
-                    onClick = { navController.navigate("login") },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
-                    )
-                ) {
-                    Text("Log in to see favorites", style = MaterialTheme.typography.bodyLarge)
-                }
-                Spacer(modifier = Modifier.height(25.dp))
-                TextButton(
-                    onClick = {
-                        val url = "https://www.artsy.net/"
-                        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-                        context.startActivity(intent)
-                    }, colors = ButtonDefaults.textButtonColors(
-                        contentColor = Color.Black
-                    )
-                ) {
-                    Text(
-                        "Powered by Artsy",
+                        text = formattedDate,
                         style = MaterialTheme.typography.bodyMedium,
-                        fontStyle = FontStyle.Italic,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
+                }
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.tertiary) // light gray
+                            .padding(vertical = 5.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Favorites",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(30.dp))
+                    if (sharedViewModel.user.value == null) {
+                        Button(
+                            onClick = { navController.navigate("login") },
+                            shape = RoundedCornerShape(50),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.secondary,
+                                contentColor = MaterialTheme.colorScheme.onSecondary
+                            )
+                        ) {
+                            Text(
+                                "Log in to see favorites",
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    } else if (sharedViewModel.user.value!!.favorites.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp)
+                                .clip(RoundedCornerShape(30))
+                                .background(MaterialTheme.colorScheme.primary)
+                                .padding(vertical = 16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "No favorites",
+                                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    } else {
+                        sharedViewModel.userFavorite.value.forEach {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp, vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column {
+                                    Text(
+                                        text = it.artist.name,
+                                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
+                                    )
+                                    Text(
+                                        text = "${it.artist.nationality}, ${it.artist.birthday} - ${it.artist.deathday}",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = formatTimeAgo(it.createdAt),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                    Icon(
+                                        imageVector = Icons.Default.ChevronRight,
+                                        contentDescription = "Go to details",
+                                        tint = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(25.dp))
+                    TextButton(
+                        onClick = {
+                            val url = "https://www.artsy.net/"
+                            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+                            context.startActivity(intent)
+                        }, colors = ButtonDefaults.textButtonColors(
+                            contentColor = Color.Black
+                        )
+                    ) {
+                        Text(
+                            "Powered by Artsy",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontStyle = FontStyle.Italic,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
                 }
             }
         }
-
     }
 }
 

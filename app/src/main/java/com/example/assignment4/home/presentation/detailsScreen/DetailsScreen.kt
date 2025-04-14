@@ -30,7 +30,7 @@ fun DetailsScreen(sharedViewModel: SharedViewModel) {
 
 
     LaunchedEffect(artist.links.self.href) {
-        val response = RetrofitInstance.api.getArtist(artist.links.self.href.split("/").last())
+        val response = RetrofitInstance.artsyApi.getArtist(artist.links.self.href.split("/").last())
         sharedViewModel.artistDetails.value = response
     }
 

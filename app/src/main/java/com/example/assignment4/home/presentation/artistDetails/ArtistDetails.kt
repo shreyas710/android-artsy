@@ -10,6 +10,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.PersonSearch
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,13 +40,11 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-    val userLoggedIn by remember { mutableStateOf(false) }
-
-    if (userLoggedIn && !tabs.contains("Similar Artists")) {
+    if (sharedViewModel.user.value != null && !tabs.contains("Similar Artists")) {
         tabs.add("Similar Artists")
     }
 
-    if (userLoggedIn && !icons.contains(Icons.Default.PersonSearch)) {
+    if (sharedViewModel.user.value != null && !icons.contains(Icons.Default.PersonSearch)) {
         icons.add(Icons.Default.PersonSearch)
     }
 
@@ -77,6 +77,22 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                             style = MaterialTheme.typography.titleLarge,
                             color = Color.Black
                         )
+                    }
+                },
+                actions = {
+                    if (sharedViewModel.user.value != null) {
+                        IconButton(onClick = {
+                        }) {
+                            Icon(
+                                imageVector = if (sharedViewModel.userFavorite.value.any {
+                                        it.artist.id == sharedViewModel.selectedArtist.value!!.links.self.href.split(
+                                            "/"
+                                        ).last()
+                                    }) Icons.Default.Star else Icons.Default.StarBorder,
+                                contentDescription = "Favorite",
+                                tint = Color.Black
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

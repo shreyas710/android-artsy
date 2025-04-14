@@ -1,5 +1,6 @@
 package com.example.assignment4.core.data.api
 
+import com.example.assignment4.auth.data.api.UserApiService
 import com.example.assignment4.home.data.api.ArtsyApiService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -12,12 +13,19 @@ object RetrofitInstance {
 
     private val okHttpClient = OkHttpClient.Builder().cookieJar(cookieJar).build()
 
-    val api: ArtsyApiService by lazy {
+    private val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ArtsyApiService::class.java)
+    }
+
+    val artsyApi: ArtsyApiService by lazy {
+        retrofit.create(ArtsyApiService::class.java)
+    }
+
+    val userApi: UserApiService by lazy {
+        retrofit.create(UserApiService::class.java)
     }
 }

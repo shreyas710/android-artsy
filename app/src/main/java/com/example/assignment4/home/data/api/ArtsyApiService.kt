@@ -7,7 +7,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ArtsyApiService {
-    // Fetch an XAPP token using your client_id and client_secret.
     @GET("api/artsy")
     suspend fun getXappToken(
     ): TokenResponse

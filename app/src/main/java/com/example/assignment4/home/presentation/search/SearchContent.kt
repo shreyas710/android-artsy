@@ -53,7 +53,7 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
     LaunchedEffect(searchQuery) {
         if (searchQuery.length >= 3) {
             try {
-                val response = RetrofitInstance.api.getArtists(searchQuery)
+                val response = RetrofitInstance.artsyApi.getArtists(searchQuery)
                 sharedViewModel.artists.value = response
             } catch (e: Exception) {
                 e.printStackTrace()
