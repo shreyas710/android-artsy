@@ -133,7 +133,7 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                         horizontalArrangement = Arrangement.Start
                     ) {
                         Text(
-                            sharedViewModel.selectedArtist.value!!.title,
+                            sharedViewModel.artistDetails.value!!.name,
                             style = MaterialTheme.typography.titleLarge,
                             color = Color.Black
                         )
@@ -143,32 +143,24 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                     if (sharedViewModel.user.value != null) {
                         IconButton(onClick = {
                             if (sharedViewModel.userFavorite.value.any {
-                                    it.artist.id == sharedViewModel.selectedArtist.value!!.links.self.href.split(
-                                        "/"
-                                    ).last()
+                                    it.artist.id == sharedViewModel.artistDetails.value!!.id
                                 }) {
                                 coroutineScope.launch {
                                     removeFavorite(
-                                        sharedViewModel.selectedArtist.value!!.links.self.href.split(
-                                            "/"
-                                        ).last()
+                                        sharedViewModel.artistDetails.value!!.id
                                     )
                                 }
                             } else {
                                 coroutineScope.launch {
                                     addFavorite(
-                                        sharedViewModel.selectedArtist.value!!.links.self.href.split(
-                                            "/"
-                                        ).last()
+                                        sharedViewModel.artistDetails.value!!.id
                                     )
                                 }
                             }
                         }) {
                             Icon(
                                 imageVector = if (sharedViewModel.userFavorite.value.any {
-                                        it.artist.id == sharedViewModel.selectedArtist.value!!.links.self.href.split(
-                                            "/"
-                                        ).last()
+                                        it.artist.id == sharedViewModel.artistDetails.value!!.id
                                     }) Icons.Default.Star else Icons.Default.StarBorder,
                                 contentDescription = "Favorite",
                                 tint = Color.Black

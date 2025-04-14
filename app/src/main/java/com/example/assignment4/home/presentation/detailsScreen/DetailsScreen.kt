@@ -13,26 +13,17 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.assignment4.core.data.api.RetrofitInstance
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun DetailsScreen(sharedViewModel: SharedViewModel) {
-    val artist = sharedViewModel.selectedArtist.value!!
     val scrollState = rememberScrollState()
-
-
-    LaunchedEffect(artist.links.self.href) {
-        val response = RetrofitInstance.artsyApi.getArtist(artist.links.self.href.split("/").last())
-        sharedViewModel.artistDetails.value = response
-    }
 
     val details = sharedViewModel.artistDetails.value
 

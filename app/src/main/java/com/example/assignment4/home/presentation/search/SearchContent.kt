@@ -33,8 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.assignment4.core.data.api.RetrofitInstance
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
@@ -75,6 +81,16 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Search
                         ),
+                        cursorBrush = SolidColor(Color.Black),
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = FontFamily.Default,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 22.sp,
+                            lineHeight = 28.sp,
+                            letterSpacing = 0.sp,
+                            textDecoration = TextDecoration.None
+                        ),
                         decorationBox = { innerTextField ->
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -88,29 +104,27 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                                     tint = Color.Black
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Box(
-                                    modifier = Modifier.weight(5f)
-                                ) {
+
+                                Box(modifier = Modifier.weight(4f)) {
                                     if (searchQuery.isEmpty()) {
                                         Text(
                                             text = "Search Artists...",
                                             style = MaterialTheme.typography.titleLarge,
                                             color = Color.Black
                                         )
-                                    } else {
-                                        Text(
-                                            searchQuery,
-                                            style = MaterialTheme.typography.titleLarge,
-                                            modifier = Modifier.padding(top = 10.dp),
-                                            color = Color.Black
-                                        )
                                     }
 
-                                    Row(
-                                        horizontalArrangement = Arrangement.End,
-                                        modifier = Modifier.fillMaxWidth()
+                                    Box(
+                                        modifier = Modifier.padding(top = if (searchQuery.isNotEmpty()) 10.dp else 0.dp)
                                     ) {
-                                        if (searchQuery.isNotEmpty()) {
+                                        innerTextField()
+                                    }
+
+                                    if (searchQuery.isNotEmpty()) {
+                                        Row(
+                                            horizontalArrangement = Arrangement.End,
+                                            modifier = Modifier.fillMaxWidth()
+                                        ) {
                                             IconButton(onClick = {
                                                 searchQuery = ""
                                                 sharedViewModel.artists.value = emptyList()
@@ -125,7 +139,7 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                                     }
                                 }
                             }
-                        },
+                        }
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

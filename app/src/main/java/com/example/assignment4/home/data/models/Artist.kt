@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class Artist(
     val type: String,
     val title: String,
-    val description: String?, // nullable if description can be null
+    val description: String?,
     @SerializedName("og_type")
     val ogType: String,
     @SerializedName("_links")

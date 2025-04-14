@@ -261,7 +261,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             shape = RoundedCornerShape(50),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.secondary,
-                                contentColor = MaterialTheme.colorScheme.onSecondary
+                                contentColor = Color.White
                             )
                         ) {
                             Text(
@@ -282,7 +282,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             Text(
                                 text = "No favorites",
                                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
-                                color = MaterialTheme.colorScheme.onPrimary
+                                color = Color.Black
                             )
                         }
                     } else {
@@ -315,11 +315,18 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onPrimary
                                     )
-                                    Icon(
-                                        imageVector = Icons.Default.ChevronRight,
-                                        contentDescription = "Go to details",
-                                        tint = MaterialTheme.colorScheme.onPrimary
-                                    )
+                                    IconButton(
+                                        onClick = {
+                                            sharedViewModel.artistDetails.value = it.artist
+                                            navController.navigate("artistDetails")
+                                        }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.ChevronRight,
+                                            contentDescription = "Go to details",
+                                            tint = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    }
                                 }
                             }
                         }

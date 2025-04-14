@@ -102,11 +102,18 @@ fun ArtistCard(
         }
     }
 
+    suspend fun fetchArtistDetails() {
+        val response = RetrofitInstance.artsyApi.getArtist(artist.links.self.href.split("/").last())
+        sharedViewModel.artistDetails.value = response
+    }
+
     Card(
         onClick = {
-            sharedViewModel.selectedArtist.value = artist
-            sharedViewModel.artistDetails.value = null
-            navController.navigate("artistDetails")
+            coroutineScope.launch {
+                sharedViewModel.selectedArtist.value = artist
+                fetchArtistDetails()
+                navController.navigate("artistDetails")
+            }
         },
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -168,7 +175,8 @@ fun ArtistCard(
                                     ).last()
                                 }) Icons.Default.Star else Icons.Default.StarBorder,
                             contentDescription = "Favorite Star",
-                            modifier = Modifier.size(25.dp)
+                            modifier = Modifier.size(25.dp),
+                            tint = Color.Black
                         )
                     }
                 }
