@@ -4,6 +4,7 @@ import com.example.assignment4.auth.data.models.Favorite
 import com.example.assignment4.auth.data.models.FavoriteRequest
 import com.example.assignment4.auth.data.models.LoginRequest
 import com.example.assignment4.auth.data.models.LoginResponse
+import com.example.assignment4.auth.data.models.RegisterRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.HTTP
@@ -22,6 +23,11 @@ interface UserApiService {
     @POST("api/users/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
+    ): Response<LoginResponse>
+
+    @POST("api/users")
+    suspend fun register(
+        @Body registerRequest: RegisterRequest
     ): Response<LoginResponse>
 
     @HTTP(method = "DELETE", path = "api/users/favorites", hasBody = true)

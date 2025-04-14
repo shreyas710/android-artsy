@@ -1,15 +1,18 @@
 package com.example.assignment4
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.assignment4.auth.presentation.login.Login
+import com.example.assignment4.auth.presentation.signup.Register
 import com.example.assignment4.home.presentation.home.HomeScreen
 import com.example.assignment4.home.presentation.search.SearchContent
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
@@ -19,6 +22,7 @@ import com.example.assignment4.ui.theme.Assignment4Theme
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -45,6 +49,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("login") {
                         Login(navController = navController, sharedViewModel = sharedViewModel)
+                    }
+                    composable("register") {
+                        Register(navController = navController, sharedViewModel = sharedViewModel)
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package com.example.assignment4.auth.presentation.login
+package com.example.assignment4.auth.presentation.signup
 
 import android.util.Patterns
 import androidx.compose.foundation.clickable
@@ -27,8 +27,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.*
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -40,7 +43,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.assignment4.auth.data.models.LoginRequest
+import com.example.assignment4.auth.data.models.RegisterRequest
 import com.example.assignment4.core.data.api.LoginDataStoreManager
 import com.example.assignment4.core.data.api.RetrofitInstance
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
@@ -48,7 +51,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
+fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,7 +73,7 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                         horizontalArrangement = Arrangement.Start
                     ) {
                         Text(
-                            "Login",
+                            "Register",
                             style = MaterialTheme.typography.titleLarge,
                             color = Color.Black
                         )
@@ -86,13 +89,16 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
 
         val coroutineScope = rememberCoroutineScope()
 
+        val (name, setName) = remember { mutableStateOf("") }
+        var nameError by remember { mutableStateOf<String?>(null) }
+
         val (email, setEmail) = remember { mutableStateOf("") }
         var emailError by remember { mutableStateOf<String?>(null) }
 
         val (password, setPassword) = remember { mutableStateOf("") }
         var passwordError by remember { mutableStateOf<String?>(null) }
 
-        var loginError by remember { mutableStateOf<String?>(null) }
+        var registerError by remember { mutableStateOf<String?>(null) }
 
         val focusManager = LocalFocusManager.current
 
@@ -100,23 +106,24 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
 
         val context = LocalContext.current
 
-        suspend fun handleLogin() {
+        suspend fun handleRegister() {
             setLoading(true)
             try {
-                val loginRequest = LoginRequest(email = email, password = password)
-                val response = RetrofitInstance.userApi.login(loginRequest)
+                val registerRequest =
+                    RegisterRequest(name = name, email = email, password = password)
+                val response = RetrofitInstance.userApi.register(registerRequest)
                 if (response.isSuccessful) {
-                    val loginResponse = response.body()
-                    if (loginResponse != null) {
-                        LoginDataStoreManager.saveLoginResponse(context, loginResponse)
-                        sharedViewModel.user.value = loginResponse
+                    val registerResponse = response.body()
+                    if (registerResponse != null) {
+                        LoginDataStoreManager.saveLoginResponse(context, registerResponse)
+                        sharedViewModel.user.value = registerResponse
                         navController.navigate("home")
                     } else {
-                        loginError = "Email or Password is Incorrect"
+                        registerError = "User with this email already exists"
                         return
                     }
                 } else {
-                    loginError = "Email or Password is Incorrect"
+                    registerError = "User with this email already exists"
                     return
                 }
             } catch (e: Exception) {
@@ -135,13 +142,46 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
             verticalArrangement = Arrangement.Center
         ) {
             OutlinedTextField(
+                value = name,
+                onValueChange = {
+                    registerError = null
+                    setName(it)
+                    nameError = null
+                },
+                label = { Text("Enter Full Name") },
+                isError = nameError != null,
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.secondary,
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    cursorColor = MaterialTheme.colorScheme.secondary
+                )
+            )
+
+            if (nameError != null) {
+                Text(
+                    text = nameError!!,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(top = 4.dp, bottom = 8.dp),
+                    fontSize = 15.sp
+                )
+            } else {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            OutlinedTextField(
                 value = email,
                 onValueChange = {
-                    loginError = null
+                    registerError = null
                     setEmail(it)
                     emailError = null
                 },
-                label = { Text("Email") },
+                label = { Text("Enter Email") },
                 isError = emailError != null,
                 singleLine = true,
                 modifier = Modifier
@@ -179,7 +219,7 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
             OutlinedTextField(
                 value = password,
                 onValueChange = {
-                    loginError = null
+                    registerError = null
                     setPassword(it)
                     passwordError = null
                 },
@@ -210,9 +250,9 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            if (loginError != null) {
+            if (registerError != null) {
                 Text(
-                    text = loginError!!,
+                    text = registerError!!,
                     color = Color.Red,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
@@ -230,6 +270,9 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                         email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
                     val validPassword = password.isNotEmpty()
 
+                    if (name.isEmpty()) {
+                        nameError = "Full name cannot be empty"
+                    }
                     if (email.isEmpty()) {
                         emailError = "Email cannot be empty"
                     }
@@ -244,9 +287,9 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                         }
                     }
 
-                    if (validEmail && validPassword) {
+                    if (validEmail && validPassword && name.isNotEmpty()) {
                         coroutineScope.launch {
-                            handleLogin()
+                            handleRegister()
                         }
                     }
                 },
@@ -260,7 +303,7 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                         modifier = Modifier.size(24.dp)
                     )
                 } else {
-                    Text("Login", color = Color.White, fontSize = 17.sp)
+                    Text("Register", color = Color.White, fontSize = 17.sp)
                 }
             }
 
@@ -269,13 +312,13 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text("Don't have an account yet? ")
+                Text("Already have an account? ")
                 Text(
-                    text = "Register",
+                    text = "Login",
                     color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable {
-                        navController.navigate("register")
+                        navController.navigate("login")
                     }
                 )
             }
