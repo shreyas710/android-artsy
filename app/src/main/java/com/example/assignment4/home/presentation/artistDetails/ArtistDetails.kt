@@ -18,6 +18,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -41,6 +43,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val tabs = remember { mutableListOf("Details", "Artworks") }
     val icons = remember { mutableListOf(Icons.Default.Info, Icons.Default.AccountBox) }
 
@@ -71,7 +75,6 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                 request = request
             )
             if (response.isSuccessful) {
-                println("Favorite added successfully: ${response.body()}")
                 sharedViewModel.user.value!!.favorites = response.body()!!.favorites
                 val response2 = RetrofitInstance.artsyApi.getArtist(favoriteId)
 
@@ -83,6 +86,7 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                     createdAt = createdAt
                 )
                 LoginDataStoreManager.saveLoginResponse(context, sharedViewModel.user.value!!)
+                snackbarHostState.showSnackbar("Added to Favorites")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -106,6 +110,7 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                     it.artist.id != favoriteId
                 }
                 LoginDataStoreManager.saveLoginResponse(context, sharedViewModel.user.value!!)
+                snackbarHostState.showSnackbar("Removed from Favorites")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -173,8 +178,8 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 ),
             )
-        }
-
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         Column {
             SecondaryTabRow(

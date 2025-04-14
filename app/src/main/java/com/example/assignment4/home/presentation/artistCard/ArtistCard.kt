@@ -19,6 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,6 +48,7 @@ fun ArtistCard(
     navController: NavController,
     sharedViewModel: SharedViewModel,
     artist: Artist,
+    snackbarHostState: SnackbarHostState
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -61,7 +63,6 @@ fun ArtistCard(
                 request = request
             )
             if (response.isSuccessful) {
-                println("Favorite added successfully: ${response.body()}")
                 sharedViewModel.user.value!!.favorites = response.body()!!.favorites
                 val response2 = RetrofitInstance.artsyApi.getArtist(favoriteId)
 
@@ -73,6 +74,7 @@ fun ArtistCard(
                     createdAt = createdAt
                 )
                 LoginDataStoreManager.saveLoginResponse(context, sharedViewModel.user.value!!)
+                snackbarHostState.showSnackbar("Added to Favorites")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -96,6 +98,7 @@ fun ArtistCard(
                     it.artist.id != favoriteId
                 }
                 LoginDataStoreManager.saveLoginResponse(context, sharedViewModel.user.value!!)
+                snackbarHostState.showSnackbar("Removed from Favorites")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -120,7 +123,7 @@ fun ArtistCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .padding(vertical = 10.dp)
+            .padding(vertical = 10.dp),
     ) {
         Box {
             Image(

@@ -19,6 +19,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -49,6 +51,8 @@ import com.example.assignment4.home.presentation.artistCard.ArtistCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -148,7 +152,8 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                 )
             )
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -160,7 +165,8 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                     ArtistCard(
                         navController = navController,
                         sharedViewModel = sharedViewModel,
-                        artist = sharedViewModel.artists.value[artistId]
+                        artist = sharedViewModel.artists.value[artistId],
+                        snackbarHostState = snackbarHostState
                     )
                 }
             }

@@ -42,6 +42,8 @@ import java.util.Date
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val context = LocalContext.current
 
     val loginResponse by produceState<LoginResponse?>(initialValue = null, key1 = context) {
@@ -191,6 +193,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                     LoginDataStoreManager.clearLoginResponse(context)
                                     sharedViewModel.user.value = null
                                     expanded = false
+                                    snackbarHostState.showSnackbar("Logged out successfully")
                                 }
                             }
                         )
@@ -200,13 +203,15 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                 coroutineScope.launch {
                                     deleteAccount()
                                     expanded = false
+                                    snackbarHostState.showSnackbar("Deleted user successfully")
                                 }
                             }
                         )
                     }
                 }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         if (loading) {
             Box(
