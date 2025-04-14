@@ -15,6 +15,4 @@ data class SelectedArtist(
     val name: String,
     @SerializedName("nationality")
     val nationality: String,
-    @SerializedName("isFavorite")
-    val isFavorite: Boolean? = null
 )

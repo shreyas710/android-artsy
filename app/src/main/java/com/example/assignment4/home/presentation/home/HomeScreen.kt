@@ -1,6 +1,8 @@
 package com.example.assignment4.home.presentation.home
 
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +36,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Date
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
@@ -219,7 +222,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             )
                         }
                     } else {
-                        sharedViewModel.userFavorite.value.forEach {
+                        sharedViewModel.userFavorite.value.reversed().forEach {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()

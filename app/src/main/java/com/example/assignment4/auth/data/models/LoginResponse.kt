@@ -6,5 +6,5 @@ data class LoginResponse(
     val email: String,
     val pic: String,
     val token: String,
-    val favorites: List<Favorite>,
+    var favorites: List<Favorite>,
 )

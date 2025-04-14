@@ -18,13 +18,16 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -33,6 +36,11 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
 import com.example.assignment4.home.data.models.Artist
 import com.example.assignment4.R
+import com.example.assignment4.auth.data.models.FavoriteRequest
+import com.example.assignment4.auth.data.models.Favorites
+import com.example.assignment4.core.data.api.LoginDataStoreManager
+import com.example.assignment4.core.data.api.RetrofitInstance
+import kotlinx.coroutines.launch
 
 @Composable
 fun ArtistCard(
@@ -40,6 +48,60 @@ fun ArtistCard(
     sharedViewModel: SharedViewModel,
     artist: Artist,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+
+    suspend fun addFavorite(favoriteId: String) {
+        try {
+            val token = "Bearer ${sharedViewModel.user.value!!.token}"
+            val request = FavoriteRequest(id = favoriteId)
+            val response = RetrofitInstance.userApi.addFavorite(
+                token = token,
+                request = request
+            )
+            if (response.isSuccessful) {
+                println("Favorite added successfully: ${response.body()}")
+                sharedViewModel.user.value!!.favorites = response.body()!!.favorites
+                val response2 = RetrofitInstance.artsyApi.getArtist(favoriteId)
+
+                val createdAt = sharedViewModel.user.value!!.favorites.find {
+                    it.id == favoriteId
+                }!!.createdAt
+                sharedViewModel.userFavorite.value = sharedViewModel.userFavorite.value + Favorites(
+                    artist = response2,
+                    createdAt = createdAt
+                )
+                LoginDataStoreManager.saveLoginResponse(context, sharedViewModel.user.value!!)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    suspend fun removeFavorite(favoriteId: String) {
+        try {
+            val token = "Bearer ${sharedViewModel.user.value!!.token}"
+            val request = FavoriteRequest(id = favoriteId)
+            val response = RetrofitInstance.userApi.deleteFavorite(
+                token = token,
+                request = request
+            )
+            if (response.isSuccessful) {
+                sharedViewModel.user.value!!.favorites =
+                    sharedViewModel.user.value!!.favorites.filter {
+                        it.id != favoriteId
+                    }
+                sharedViewModel.userFavorite.value = sharedViewModel.userFavorite.value.filter {
+                    it.artist.id != favoriteId
+                }
+                LoginDataStoreManager.saveLoginResponse(context, sharedViewModel.user.value!!)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     Card(
         onClick = {
             sharedViewModel.selectedArtist.value = artist
@@ -76,15 +138,39 @@ fun ArtistCard(
                         .background(MaterialTheme.colorScheme.primary)
                         .align(Alignment.TopEnd)
                 ) {
-                    Icon(
-                        imageVector = if (sharedViewModel.userFavorite.value.any {
+                    IconButton(onClick = {
+                        if (sharedViewModel.userFavorite.value.any {
                                 it.artist.id == artist.links.self.href.split(
                                     "/"
                                 ).last()
-                            }) Icons.Default.Star else Icons.Default.StarBorder,
-                        contentDescription = "Favorite Star",
-                        modifier = Modifier.size(25.dp)
-                    )
+                            }) {
+                            coroutineScope.launch {
+                                removeFavorite(
+                                    artist.links.self.href.split(
+                                        "/"
+                                    ).last()
+                                )
+                            }
+                        } else {
+                            coroutineScope.launch {
+                                addFavorite(
+                                    artist.links.self.href.split(
+                                        "/"
+                                    ).last()
+                                )
+                            }
+                        }
+                    }) {
+                        Icon(
+                            imageVector = if (sharedViewModel.userFavorite.value.any {
+                                    it.artist.id == artist.links.self.href.split(
+                                        "/"
+                                    ).last()
+                                }) Icons.Default.Star else Icons.Default.StarBorder,
+                            contentDescription = "Favorite Star",
+                            modifier = Modifier.size(25.dp)
+                        )
+                    }
                 }
             }
             Box(
