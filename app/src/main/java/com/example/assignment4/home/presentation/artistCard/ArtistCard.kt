@@ -21,11 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
 import com.example.assignment4.home.data.models.Artist
+import com.example.assignment4.R
 
 @Composable
 fun ArtistCard(
@@ -47,10 +49,16 @@ fun ArtistCard(
     ) {
         Box {
             Image(
-                painter = rememberAsyncImagePainter(model = artist.links.thumbnail.href),
+                painter = rememberAsyncImagePainter(
+                    model = if ("missing_image.png" in artist.links.thumbnail.href) {
+                        R.drawable.artsy_logo
+                    } else {
+                        artist.links.thumbnail.href.trim()
+                    }
+                ),
                 contentDescription = artist.title,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
             Box(
                 modifier = Modifier
@@ -75,7 +83,9 @@ fun ArtistCard(
                         text = artist.title,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
                         modifier = Modifier.weight(1f),
-                        color = Color.Black
+                        color = Color.Black,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Icon(
                         imageVector = Icons.Default.ChevronRight,
