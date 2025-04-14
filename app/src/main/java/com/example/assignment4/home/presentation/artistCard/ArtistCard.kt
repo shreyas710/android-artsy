@@ -38,6 +38,7 @@ fun ArtistCard(
     Card(
         onClick = {
             sharedViewModel.selectedArtist.value = artist
+            sharedViewModel.artistDetails.value = null
             navController.navigate("artistDetails")
         },
         shape = MaterialTheme.shapes.large,

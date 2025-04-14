@@ -1,6 +1,7 @@
 package com.example.assignment4.home.data.api
 
 import com.example.assignment4.home.data.models.Artist
+import com.example.assignment4.home.data.models.SelectedArtist
 import com.example.assignment4.home.data.models.TokenResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,4 +16,9 @@ interface ArtsyApiService {
     suspend fun getArtists(
         @Path("query") query: String
     ): List<Artist>
+
+    @GET("api/artsy/get_artist/{id}")
+    suspend fun getArtist(
+        @Path("id") id: String
+    ): SelectedArtist
 }
