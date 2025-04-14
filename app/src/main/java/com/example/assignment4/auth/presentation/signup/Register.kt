@@ -98,8 +98,6 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
         val (password, setPassword) = remember { mutableStateOf("") }
         var passwordError by remember { mutableStateOf<String?>(null) }
 
-        var registerError by remember { mutableStateOf<String?>(null) }
-
         val focusManager = LocalFocusManager.current
 
         val (loading, setLoading) = remember { mutableStateOf(false) }
@@ -119,11 +117,11 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                         sharedViewModel.user.value = registerResponse
                         navController.navigate("home")
                     } else {
-                        registerError = "User with this email already exists"
+                        emailError = "User with this email already exists"
                         return
                     }
                 } else {
-                    registerError = "User with this email already exists"
+                    emailError = "User with this email already exists"
                     return
                 }
             } catch (e: Exception) {
@@ -144,7 +142,6 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
             OutlinedTextField(
                 value = name,
                 onValueChange = {
-                    registerError = null
                     setName(it)
                     nameError = null
                 },
@@ -177,7 +174,6 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
             OutlinedTextField(
                 value = email,
                 onValueChange = {
-                    registerError = null
                     setEmail(it)
                     emailError = null
                 },
@@ -219,7 +215,6 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
             OutlinedTextField(
                 value = password,
                 onValueChange = {
-                    registerError = null
                     setPassword(it)
                     passwordError = null
                 },
@@ -247,19 +242,6 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                     fontSize = 15.sp
                 )
             } else {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
-            if (registerError != null) {
-                Text(
-                    text = registerError!!,
-                    color = Color.Red,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(top = 4.dp, bottom = 8.dp),
-                    fontSize = 15.sp
-                )
                 Spacer(modifier = Modifier.height(8.dp))
             }
 

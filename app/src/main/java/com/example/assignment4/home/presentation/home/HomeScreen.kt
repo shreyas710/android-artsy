@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +29,7 @@ import androidx.navigation.NavController
 import com.example.assignment4.core.data.api.RetrofitInstance
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
 import androidx.core.net.toUri
+import coil.compose.rememberAsyncImagePainter
 import com.example.assignment4.auth.data.models.Favorites
 import com.example.assignment4.auth.data.models.LoginResponse
 import com.example.assignment4.core.data.api.LoginDataStoreManager
@@ -97,6 +99,20 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
         return "$days day${if (days != 1) "s" else ""} ago"
     }
 
+    var expanded by remember { mutableStateOf(false) }
+
+    suspend fun deleteAccount() {
+        try {
+            val response =
+                RetrofitInstance.userApi.deleteUser("Bearer ${sharedViewModel.user.value!!.token}")
+            if (response.isSuccessful) {
+                LoginDataStoreManager.clearLoginResponse(context)
+                sharedViewModel.user.value = null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -129,15 +145,63 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                         )
                     }
                     IconButton(onClick = {
-                        coroutineScope.launch {
-                            LoginDataStoreManager.clearLoginResponse(context)
-                            sharedViewModel.user.value = null
+                        if (sharedViewModel.user.value != null) {
+                            expanded = !expanded
+                        } else {
+                            navController.navigate("login")
                         }
                     }) {
                         Icon(
-                            Icons.Default.Person,
+                            painter = if (!sharedViewModel.user.value?.pic.isNullOrEmpty()) {
+                                rememberAsyncImagePainter(model = sharedViewModel.user.value!!.pic)
+                            } else {
+                                rememberVectorPainter(image = Icons.Default.Person)
+                            },
                             contentDescription = "Account",
-                            tint = Color.Black
+                            modifier = Modifier
+                                .size(
+                                    if (!sharedViewModel.user.value?.pic.isNullOrEmpty()) {
+                                        30.dp
+                                    } else {
+                                        25.dp
+                                    }
+                                )
+                                .clip(RoundedCornerShape(50.dp)),
+                            tint = if (!sharedViewModel.user.value?.pic.isNullOrEmpty()) {
+                                Color.Unspecified
+                            } else {
+                                Color.Black
+                            }
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    "Log out",
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    fontSize = 15.sp
+                                )
+                            },
+                            onClick = {
+                                coroutineScope.launch {
+                                    LoginDataStoreManager.clearLoginResponse(context)
+                                    sharedViewModel.user.value = null
+                                    expanded = false
+                                }
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Delete Account", color = Color.Red, fontSize = 15.sp) },
+                            onClick = {
+                                coroutineScope.launch {
+                                    deleteAccount()
+                                    expanded = false
+                                }
+                            }
                         )
                     }
                 }
@@ -180,7 +244,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.tertiary) // light gray
+                            .background(MaterialTheme.colorScheme.tertiary)
                             .padding(vertical = 5.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {

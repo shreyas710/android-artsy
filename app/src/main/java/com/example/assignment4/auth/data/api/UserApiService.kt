@@ -7,6 +7,7 @@ import com.example.assignment4.auth.data.models.LoginResponse
 import com.example.assignment4.auth.data.models.RegisterRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.HTTP
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -41,4 +42,9 @@ interface UserApiService {
         @Header("Authorization") token: String,
         @Body request: FavoriteRequest
     ): Response<AddFavoriteResponse>
+
+    @DELETE("api/users")
+    suspend fun deleteUser(
+        @Header("Authorization") token: String,
+    ): Response<FavoriteResponse>
 }
