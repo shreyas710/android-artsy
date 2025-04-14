@@ -114,7 +114,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(
-                    onClick = { /* TODO: Log in */ },
+                    onClick = { navController.navigate("login") },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondary,

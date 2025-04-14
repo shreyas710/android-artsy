@@ -1,4 +1,4 @@
-package com.example.assignment4.home.data.api
+package com.example.assignment4.core.data.api
 
 import okhttp3.Cookie
 import okhttp3.CookieJar

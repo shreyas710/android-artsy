@@ -125,7 +125,7 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                                     }
                                 }
                             }
-                        }
+                        },
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

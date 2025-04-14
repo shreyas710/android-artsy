@@ -1,7 +1,6 @@
 package com.example.assignment4.core.data.api
 
 import com.example.assignment4.home.data.api.ArtsyApiService
-import com.example.assignment4.home.data.api.SimpleCookieJar
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
