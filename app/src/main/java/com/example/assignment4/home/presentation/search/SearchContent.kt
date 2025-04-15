@@ -1,14 +1,17 @@
 package com.example.assignment4.home.presentation.search
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -32,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -160,14 +164,33 @@ fun SearchContent(navController: NavController, sharedViewModel: SharedViewModel
                 .fillMaxWidth()
                 .padding(innerPadding)
         ) {
-            LazyColumn(modifier = Modifier.padding(16.dp)) {
-                items(sharedViewModel.artists.value.size) { artistId ->
-                    ArtistCard(
-                        navController = navController,
-                        sharedViewModel = sharedViewModel,
-                        artist = sharedViewModel.artists.value[artistId],
-                        snackbarHostState = snackbarHostState
+            if (sharedViewModel.artists.value.isEmpty() && searchQuery.length >= 3) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(y = 20.dp)
+                        .padding(horizontal = 10.dp)
+                        .clip(RoundedCornerShape(30))
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(vertical = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No results found",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
+                        color = Color.Black
                     )
+                }
+            } else {
+                LazyColumn(modifier = Modifier.padding(16.dp)) {
+                    items(sharedViewModel.artists.value.size) { artistId ->
+                        ArtistCard(
+                            navController = navController,
+                            sharedViewModel = sharedViewModel,
+                            artist = sharedViewModel.artists.value[artistId],
+                            snackbarHostState = snackbarHostState
+                        )
+                    }
                 }
             }
         }
