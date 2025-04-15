@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.assignment4.core.presentation.viewModel.SharedViewModel
@@ -68,7 +69,9 @@ fun DetailsScreen(sharedViewModel: SharedViewModel) {
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontSize = 15.sp,
                     lineHeight = 20.sp
-                )
+                ),
+                modifier = Modifier.padding(end = 10.dp),
+                textAlign = TextAlign.Justify
             )
         }
     }

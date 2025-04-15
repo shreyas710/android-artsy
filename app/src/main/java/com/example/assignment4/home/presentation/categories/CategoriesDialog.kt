@@ -4,10 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -43,6 +43,7 @@ import com.example.assignment4.home.data.models.Artwork
 import com.example.assignment4.home.data.models.GeneCategory
 import kotlinx.coroutines.launch
 import androidx.compose.material3.Icon
+import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -123,7 +124,7 @@ fun CarouselCard(
 ) {
     Card(
         modifier = Modifier
-            .width(300.dp)
+            .width(250.dp)
             .height(450.dp),
         shape = RoundedCornerShape(12.dp),
     ) {
@@ -150,6 +151,8 @@ fun CarouselCard(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(8.dp),
+                maxLines = 8,
+                textAlign = TextAlign.Justify
             )
         }
     }
@@ -173,12 +176,11 @@ fun LoopingCarousel(geneList: List<GeneCategory>) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(450.dp)
+            .height(400.dp)
     ) {
 
         LazyRow(
             state = listState,
-            contentPadding = PaddingValues(horizontal = 40.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -206,6 +208,7 @@ fun LoopingCarousel(geneList: List<GeneCategory>) {
             },
             modifier = Modifier
                 .align(Alignment.CenterStart)
+                .offset(x = (-35).dp)
         ) {
             Icon(
                 imageVector = Icons.Default.ChevronLeft,
@@ -225,6 +228,7 @@ fun LoopingCarousel(geneList: List<GeneCategory>) {
             },
             modifier = Modifier
                 .align(Alignment.CenterEnd)
+                .offset(x = 35.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.ChevronRight,
