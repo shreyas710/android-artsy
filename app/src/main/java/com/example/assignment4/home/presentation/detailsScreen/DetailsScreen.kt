@@ -49,20 +49,21 @@ fun DetailsScreen(sharedViewModel: SharedViewModel) {
                 .fillMaxSize()
                 .verticalScroll(scrollState)
                 .padding(16.dp, top = 0.dp, bottom = 30.dp)
-
         ) {
             Text(
                 text = details.name,
                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 25.sp),
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                color = MaterialTheme.colorScheme.onPrimary
             )
 
             Text(
                 text = "${details.nationality}, ${details.birthday} - ${details.deathday}",
                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 15.sp),
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                color = MaterialTheme.colorScheme.onPrimary
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -74,7 +75,8 @@ fun DetailsScreen(sharedViewModel: SharedViewModel) {
                     lineHeight = 20.sp
                 ),
                 modifier = Modifier.padding(end = 10.dp),
-                textAlign = TextAlign.Justify
+                textAlign = TextAlign.Justify,
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
