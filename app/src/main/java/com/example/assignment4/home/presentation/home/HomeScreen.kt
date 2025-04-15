@@ -80,25 +80,23 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
         }
     }
 
-    fun formatTimeAgo(createdDate: Date): String {
-        val seconds = ((Date().time - createdDate.time) / 1000).toInt()
-
-        if (seconds < 60) {
-            return "$seconds second${if (seconds != 1) "s" else ""} ago"
+    var currentTime by remember { mutableStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            kotlinx.coroutines.delay(1000L)
+            currentTime = System.currentTimeMillis()
         }
+    }
 
-        val minutes = seconds / 60
-        if (minutes < 60) {
-            return "$minutes minute${if (minutes != 1) "s" else ""} ago"
+    fun formatTimeAgo(createdDate: Date, currentTime: Long): String {
+        val secondsDiff = ((currentTime - createdDate.time) / 1000).toInt()
+
+        return when {
+            secondsDiff < 60 -> "$secondsDiff second${if (secondsDiff != 1) "s" else ""} ago"
+            secondsDiff < 3600 -> "${secondsDiff / 60} minute${if ((secondsDiff / 60) != 1) "s" else ""} ago"
+            secondsDiff < 86400 -> "${secondsDiff / 3600} hour${if ((secondsDiff / 3600) != 1) "s" else ""} ago"
+            else -> "${secondsDiff / 86400} day${if ((secondsDiff / 86400) != 1) "s" else ""} ago"
         }
-
-        val hours = minutes / 60
-        if (hours < 24) {
-            return "$hours hour${if (hours != 1) "s" else ""} ago"
-        }
-
-        val days = hours / 24
-        return "$days day${if (days != 1) "s" else ""} ago"
     }
 
     var expanded by remember { mutableStateOf(false) }
@@ -316,7 +314,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Text(
-                                        text = formatTimeAgo(it.createdAt),
+                                        text = formatTimeAgo(it.createdAt, currentTime),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onPrimary
                                     )
