@@ -2,6 +2,7 @@ package com.example.assignment4.home.data.api
 
 import com.example.assignment4.home.data.models.Artist
 import com.example.assignment4.home.data.models.Artwork
+import com.example.assignment4.home.data.models.GeneCategory
 import com.example.assignment4.home.data.models.SelectedArtist
 import com.example.assignment4.home.data.models.TokenResponse
 import retrofit2.Response
@@ -27,4 +28,9 @@ interface ArtsyApiService {
     suspend fun getArtistArtworks(
         @Path("id") id: String
     ): Response<List<Artwork>>
+
+    @GET("api/artsy/get_artist_genes/{id}")
+    suspend fun getArtistGenes(
+        @Path("id") id: String
+    ): Response<List<GeneCategory>>
 }

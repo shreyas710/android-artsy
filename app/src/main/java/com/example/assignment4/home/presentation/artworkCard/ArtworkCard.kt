@@ -15,16 +15,22 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.assignment4.core.presentation.viewModel.SharedViewModel
 import com.example.assignment4.home.data.models.Artwork
+import com.example.assignment4.home.presentation.categories.CategoriesDialog
 
 @Composable
-fun ArtworkCard(artwork: Artwork) {
+fun ArtworkCard(artwork: Artwork, sharedViewModel: SharedViewModel) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Card(
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
@@ -59,7 +65,7 @@ fun ArtworkCard(artwork: Artwork) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = {},
+                onClick = { showDialog = true },
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .align(Alignment.CenterHorizontally),
@@ -71,5 +77,12 @@ fun ArtworkCard(artwork: Artwork) {
 
             Spacer(modifier = Modifier.height(8.dp))
         }
+    }
+    if (showDialog) {
+        CategoriesDialog(
+            onDismiss = { showDialog = false },
+            artwork = artwork,
+            sharedViewModel
+        )
     }
 }

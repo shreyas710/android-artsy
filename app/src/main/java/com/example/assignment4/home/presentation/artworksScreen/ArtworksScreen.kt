@@ -77,7 +77,7 @@ fun ArtworksScreen(sharedViewModel: SharedViewModel) {
         LazyColumn {
             items(sharedViewModel.artistArtworks.value.size) { index ->
                 val artwork = sharedViewModel.artistArtworks.value[index]
-                ArtworkCard(artwork)
+                ArtworkCard(artwork, sharedViewModel)
             }
         }
     }

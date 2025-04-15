@@ -6,6 +6,7 @@ import com.example.assignment4.auth.data.models.Favorites
 import com.example.assignment4.auth.data.models.LoginResponse
 import com.example.assignment4.home.data.models.Artist
 import com.example.assignment4.home.data.models.Artwork
+import com.example.assignment4.home.data.models.GeneCategory
 import com.example.assignment4.home.data.models.SelectedArtist
 
 class SharedViewModel : ViewModel() {
@@ -16,4 +17,5 @@ class SharedViewModel : ViewModel() {
     var user = mutableStateOf<LoginResponse?>(null)
     var userFavorite = mutableStateOf<List<Favorites>>(emptyList())
     var artistArtworks = mutableStateOf<List<Artwork>>(emptyList())
+    var artworkCategories = mutableStateOf<List<GeneCategory>>(emptyList())
 }
