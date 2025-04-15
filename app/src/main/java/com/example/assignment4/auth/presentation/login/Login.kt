@@ -63,7 +63,7 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
@@ -76,7 +76,7 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                         Text(
                             "Login",
                             style = MaterialTheme.typography.titleLarge,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
@@ -162,9 +162,9 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                         }
                     },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                    cursorColor = MaterialTheme.colorScheme.secondary
+                    focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 
@@ -189,16 +189,16 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                     setPassword(it)
                     passwordError = null
                 },
-                label = { Text("Password") },
+                label = { Text("Password", color = MaterialTheme.colorScheme.onPrimary) },
                 isError = passwordError != null,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                    cursorColor = MaterialTheme.colorScheme.secondary
+                    focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 
@@ -257,16 +257,16 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(if (!loading) MaterialTheme.colorScheme.secondary else Color.LightGray),
+                colors = ButtonDefaults.buttonColors(if (!loading) MaterialTheme.colorScheme.onSurface else Color.LightGray),
                 enabled = !loading
             ) {
                 if (loading) {
                     CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(24.dp)
                     )
                 } else {
-                    Text("Login", color = Color.White, fontSize = 17.sp)
+                    Text("Login", color = MaterialTheme.colorScheme.surface, fontSize = 17.sp)
                 }
             }
 
@@ -278,7 +278,7 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                 Text("Don't have an account yet? ")
                 Text(
                     text = "Register",
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable {
                         navController.navigate("register")

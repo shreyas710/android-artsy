@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
@@ -32,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,7 +74,8 @@ fun CategoriesDialog(
         title = {
             Text(
                 text = "Categories",
-                style = MaterialTheme.typography.displaySmall.copy(fontSize = 25.sp)
+                style = MaterialTheme.typography.displaySmall.copy(fontSize = 25.sp),
+                color = MaterialTheme.colorScheme.onPrimary
             )
         },
         text = {
@@ -82,7 +84,7 @@ fun CategoriesDialog(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onSurface)
                     Text(
                         text = "Loading...",
                         style = MaterialTheme.typography.bodyLarge,
@@ -94,7 +96,7 @@ fun CategoriesDialog(
                 Text(
                     text = "No categories available",
                     style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
                 LoopingCarousel(sharedViewModel.artworkCategories.value)
@@ -106,11 +108,10 @@ fun CategoriesDialog(
                 onClick = onDismiss,
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.onSurface,
                 )
             ) {
-                Text("Close")
+                Text("Close", color = MaterialTheme.colorScheme.primary)
             }
         }
     )
@@ -144,16 +145,24 @@ fun CarouselCard(
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .align(Alignment.CenterHorizontally),
+                color = MaterialTheme.colorScheme.onPrimary
             )
 
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(8.dp),
-                maxLines = 8,
-                textAlign = TextAlign.Justify
-            )
+            Box(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Justify,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
     }
 }

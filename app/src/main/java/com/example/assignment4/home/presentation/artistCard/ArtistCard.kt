@@ -26,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -180,7 +179,7 @@ fun ArtistCard(
                                 }) Icons.Default.Star else Icons.Default.StarBorder,
                             contentDescription = "Favorite Star",
                             modifier = Modifier.size(25.dp),
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -208,14 +207,14 @@ fun ArtistCard(
                         text = if (similarArtists) artist.name!! else artist.title,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
                         modifier = Modifier.weight(1f),
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Icon(
                         imageVector = Icons.Default.ChevronRight,
                         contentDescription = "Details",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }

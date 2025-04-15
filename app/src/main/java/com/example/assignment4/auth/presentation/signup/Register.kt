@@ -66,7 +66,7 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
@@ -79,7 +79,7 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                         Text(
                             "Register",
                             style = MaterialTheme.typography.titleLarge,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
@@ -158,9 +158,9 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                    cursorColor = MaterialTheme.colorScheme.secondary
+                    focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 
@@ -199,9 +199,9 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                         }
                     },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                    cursorColor = MaterialTheme.colorScheme.secondary
+                    focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 
@@ -232,9 +232,9 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                    cursorColor = MaterialTheme.colorScheme.secondary
+                    focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.onSurface,
                 )
             )
 
@@ -283,16 +283,16 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(if (!loading) MaterialTheme.colorScheme.secondary else Color.LightGray),
+                colors = ButtonDefaults.buttonColors(if (!loading) MaterialTheme.colorScheme.onSurface else Color.LightGray),
                 enabled = !loading
             ) {
                 if (loading) {
                     CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(24.dp)
                     )
                 } else {
-                    Text("Register", color = Color.White, fontSize = 17.sp)
+                    Text("Register", color = MaterialTheme.colorScheme.primary, fontSize = 17.sp)
                 }
             }
 
@@ -304,7 +304,7 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                 Text("Already have an account? ")
                 Text(
                     text = "Login",
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable {
                         navController.navigate("login")

@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.assignment4.core.data.api.RetrofitInstance
@@ -49,7 +48,7 @@ fun ArtworksScreen(sharedViewModel: SharedViewModel) {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.onSurface)
             Text(
                 text = "Loading...",
                 style = MaterialTheme.typography.bodyLarge,
@@ -70,7 +69,7 @@ fun ArtworksScreen(sharedViewModel: SharedViewModel) {
             Text(
                 text = "No artworks",
                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     } else {

@@ -128,7 +128,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                         Text(
                             "Artist Search",
                             style = MaterialTheme.typography.titleLarge,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
@@ -143,7 +143,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                         Icon(
                             Icons.Default.Search,
                             contentDescription = "Search",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                     IconButton(onClick = {
@@ -172,7 +172,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             tint = if (!sharedViewModel.user.value?.pic.isNullOrEmpty()) {
                                 Color.Unspecified
                             } else {
-                                Color.Black
+                                MaterialTheme.colorScheme.onPrimary
                             }
                         )
                     }
@@ -184,7 +184,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             text = {
                                 Text(
                                     "Log out",
-                                    color = MaterialTheme.colorScheme.secondary,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     fontSize = 15.sp
                                 )
                             },
@@ -221,7 +221,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     .padding(top = 30.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.onSurface)
             }
         } else {
             Column(
@@ -265,8 +265,8 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             onClick = { navController.navigate("login") },
                             shape = RoundedCornerShape(50),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.secondary,
-                                contentColor = Color.White
+                                containerColor = MaterialTheme.colorScheme.onSurface,
+                                contentColor = MaterialTheme.colorScheme.surface
                             )
                         ) {
                             Text(
@@ -287,7 +287,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             Text(
                                 text = "No favorites",
                                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onPrimary
                             )
                         }
                     } else {

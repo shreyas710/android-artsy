@@ -18,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -55,7 +54,7 @@ fun SimilarArtistsScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.onSurface)
             Text(
                 text = "Loading...",
                 style = MaterialTheme.typography.bodyLarge,
@@ -76,7 +75,7 @@ fun SimilarArtistsScreen(
             Text(
                 text = "No similar artists",
                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     } else {

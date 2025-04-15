@@ -27,7 +27,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.example.assignment4.auth.data.models.FavoriteRequest
@@ -127,7 +126,7 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
@@ -140,7 +139,7 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                         Text(
                             sharedViewModel.artistDetails.value!!.name,
                             style = MaterialTheme.typography.titleLarge,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
@@ -168,7 +167,7 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                                         it.artist.id == sharedViewModel.artistDetails.value!!.id
                                     }) Icons.Default.Star else Icons.Default.StarBorder,
                                 contentDescription = "Favorite",
-                                tint = Color.Black
+                                tint = MaterialTheme.colorScheme.onPrimary
                             )
                         }
                     }
@@ -193,13 +192,13 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
                         selected = selectedTabIndex == index,
                         onClick = { onTabSelected(index) },
                         text = {
-                            Text(text = title, color = MaterialTheme.colorScheme.onPrimary)
+                            Text(text = title, color = MaterialTheme.colorScheme.onSurface)
                         },
                         icon = {
                             Icon(
                                 imageVector = icons[index],
                                 contentDescription = title,
-                                tint = MaterialTheme.colorScheme.onPrimary
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     )

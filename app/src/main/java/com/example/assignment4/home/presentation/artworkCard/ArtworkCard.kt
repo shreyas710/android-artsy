@@ -60,6 +60,7 @@ fun ArtworkCard(artwork: Artwork, sharedViewModel: SharedViewModel) {
                     .padding(horizontal = 16.dp)
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 20.dp),
+                color = MaterialTheme.colorScheme.onPrimary
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -70,9 +71,9 @@ fun ArtworkCard(artwork: Artwork, sharedViewModel: SharedViewModel) {
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .align(Alignment.CenterHorizontally),
                 shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onSurface)
             ) {
-                Text(text = "View categories", color = MaterialTheme.colorScheme.onSecondary)
+                Text(text = "View categories", color = MaterialTheme.colorScheme.primary)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
