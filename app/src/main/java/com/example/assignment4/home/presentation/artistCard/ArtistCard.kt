@@ -48,7 +48,8 @@ fun ArtistCard(
     navController: NavController,
     sharedViewModel: SharedViewModel,
     artist: Artist,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    similarArtists: Boolean = false
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -134,7 +135,7 @@ fun ArtistCard(
                         artist.links.thumbnail.href.trim()
                     }
                 ),
-                contentDescription = artist.title,
+                contentDescription = if (similarArtists) artist.name else artist.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
             )
@@ -204,7 +205,7 @@ fun ArtistCard(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = artist.title,
+                        text = if (similarArtists) artist.name!! else artist.title,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
                         modifier = Modifier.weight(1f),
                         color = Color.Black,

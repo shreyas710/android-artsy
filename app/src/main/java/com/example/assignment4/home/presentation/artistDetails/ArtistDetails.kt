@@ -208,7 +208,11 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
             when (selectedTabIndex) {
                 0 -> DetailsScreen(sharedViewModel = sharedViewModel)
                 1 -> ArtworksScreen(sharedViewModel = sharedViewModel)
-                2 -> SimilarArtistsScreen()
+                2 -> SimilarArtistsScreen(
+                    sharedViewModel = sharedViewModel,
+                    navController = navController,
+                    snackbarHostState = snackbarHostState
+                )
             }
         }
     }

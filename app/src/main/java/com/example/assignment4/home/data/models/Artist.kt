@@ -9,7 +9,9 @@ data class Artist(
     @SerializedName("og_type")
     val ogType: String,
     @SerializedName("_links")
-    val links: Links
+    val links: Links,
+    val name: String?,
+    val id: String?,
 )
 
 data class Links(

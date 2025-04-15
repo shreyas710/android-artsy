@@ -18,4 +18,5 @@ class SharedViewModel : ViewModel() {
     var userFavorite = mutableStateOf<List<Favorites>>(emptyList())
     var artistArtworks = mutableStateOf<List<Artwork>>(emptyList())
     var artworkCategories = mutableStateOf<List<GeneCategory>>(emptyList())
+    var similarArtists = mutableStateOf<List<Artist>>(emptyList())
 }

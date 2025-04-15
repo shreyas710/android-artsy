@@ -33,4 +33,9 @@ interface ArtsyApiService {
     suspend fun getArtistGenes(
         @Path("id") id: String
     ): Response<List<GeneCategory>>
+
+    @GET("api/artsy/get_similar_artists/{id}")
+    suspend fun getSimilarArtists(
+        @Path("id") id: String
+    ): Response<List<Artist>>
 }
