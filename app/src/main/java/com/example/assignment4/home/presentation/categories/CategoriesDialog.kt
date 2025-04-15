@@ -111,7 +111,7 @@ fun CategoriesDialog(
                     containerColor = MaterialTheme.colorScheme.onSurface,
                 )
             ) {
-                Text("Close", color = MaterialTheme.colorScheme.primary)
+                Text("Close", color = MaterialTheme.colorScheme.onTertiary)
             }
         }
     )
@@ -169,18 +169,11 @@ fun CarouselCard(
 
 @Composable
 fun LoopingCarousel(geneList: List<GeneCategory>) {
-    val repeatCount = 500
-    val repeatedList = remember(geneList) {
-        List(repeatCount) { geneList }.flatten()
-    }
-    val startIndex = (repeatedList.size / 2).coerceAtLeast(0)
+    var startIndex = 0
 
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        listState.scrollToItem(startIndex)
-    }
 
     Box(
         modifier = Modifier
@@ -196,9 +189,9 @@ fun LoopingCarousel(geneList: List<GeneCategory>) {
                 .align(Alignment.Center)
         ) {
             items(
-                count = repeatedList.size,
+                count = geneList.size,
             ) { index ->
-                val gene = repeatedList[index]
+                val gene = geneList[index]
                 CarouselCard(
                     title = gene.name,
                     description = gene.description,
@@ -210,9 +203,10 @@ fun LoopingCarousel(geneList: List<GeneCategory>) {
         IconButton(
             onClick = {
                 coroutineScope.launch {
-                    val currentIndex = listState.firstVisibleItemIndex
-                    val newIndex = (currentIndex - 1).coerceAtLeast(0)
-                    listState.animateScrollToItem(newIndex)
+                    startIndex = (startIndex - 1)
+                    if (startIndex == -1)
+                        startIndex = geneList.lastIndex
+                    listState.animateScrollToItem(startIndex)
                 }
             },
             modifier = Modifier
@@ -230,9 +224,10 @@ fun LoopingCarousel(geneList: List<GeneCategory>) {
         IconButton(
             onClick = {
                 coroutineScope.launch {
-                    val currentIndex = listState.firstVisibleItemIndex
-                    val newIndex = (currentIndex + 1).coerceAtMost(repeatedList.lastIndex)
-                    listState.animateScrollToItem(newIndex)
+                    startIndex = (startIndex + 1)
+                    if (startIndex > geneList.lastIndex)
+                        startIndex = 0
+                    listState.animateScrollToItem(startIndex)
                 }
             },
             modifier = Modifier

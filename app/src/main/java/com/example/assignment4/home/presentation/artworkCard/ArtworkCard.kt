@@ -73,7 +73,7 @@ fun ArtworkCard(artwork: Artwork, sharedViewModel: SharedViewModel) {
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onSurface)
             ) {
-                Text(text = "View categories", color = MaterialTheme.colorScheme.primary)
+                Text(text = "View categories", color = MaterialTheme.colorScheme.onTertiary)
             }
 
             Spacer(modifier = Modifier.height(8.dp))

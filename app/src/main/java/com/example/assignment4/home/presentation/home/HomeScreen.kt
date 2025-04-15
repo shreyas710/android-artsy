@@ -256,7 +256,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                         Text(
                             text = "Favorites",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onTertiary
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                     Spacer(modifier = Modifier.height(30.dp))
