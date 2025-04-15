@@ -12,12 +12,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
+    primary = Purple40,
     onPrimary = Color.White,
     secondary = Purple40,
     onSecondary = Color.White,
     tertiary = LightBlack,
-    onTertiary = Color.White
+    onTertiary = Color.White,
+    surface = Color.Black,
+    onSurface = Purple80
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -26,7 +28,9 @@ private val LightColorScheme = lightColorScheme(
     secondary = Purple40,
     onSecondary = Color.White,
     tertiary = LightGray,
-    onTertiary = Color.Black
+    onTertiary = Color.Black,
+    surface = Color.White,
+    onSurface = Purple40
 )
 
 @Composable

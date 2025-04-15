@@ -160,7 +160,8 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.onSurface,
                     focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
 
@@ -201,7 +202,8 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.onSurface,
                     focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
 
@@ -234,7 +236,8 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.onSurface,
                     focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    cursorColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
 
@@ -292,7 +295,7 @@ fun Register(navController: NavController, sharedViewModel: SharedViewModel) {
                         modifier = Modifier.size(24.dp)
                     )
                 } else {
-                    Text("Register", color = MaterialTheme.colorScheme.primary, fontSize = 17.sp)
+                    Text("Register", color = MaterialTheme.colorScheme.surface, fontSize = 17.sp)
                 }
             }
 

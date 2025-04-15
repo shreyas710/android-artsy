@@ -164,7 +164,8 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.onSurface,
                     focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
 
@@ -189,7 +190,7 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                     setPassword(it)
                     passwordError = null
                 },
-                label = { Text("Password", color = MaterialTheme.colorScheme.onPrimary) },
+                label = { Text("Password") },
                 isError = passwordError != null,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -198,7 +199,8 @@ fun Login(navController: NavController, sharedViewModel: SharedViewModel) {
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.onSurface,
                     focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
 
