@@ -1,5 +1,6 @@
 package com.example.assignment4.home.presentation.artistDetails
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -180,7 +181,9 @@ fun ArtistDetails(navController: NavController, sharedViewModel: SharedViewModel
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-        Column {
+        Column(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+        ) {
             SecondaryTabRow(
                 selectedTabIndex = selectedTabIndex,
                 modifier = Modifier

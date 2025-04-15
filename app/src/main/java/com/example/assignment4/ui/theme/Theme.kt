@@ -18,7 +18,6 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = Color.White,
     tertiary = LightBlack,
     onTertiary = Color.White,
-    surface = Color.Black,
     onSurface = Purple80
 )
 
@@ -29,7 +28,6 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = Color.White,
     tertiary = LightGray,
     onTertiary = Color.Black,
-    surface = Color.White,
     onSurface = Purple40
 )
 

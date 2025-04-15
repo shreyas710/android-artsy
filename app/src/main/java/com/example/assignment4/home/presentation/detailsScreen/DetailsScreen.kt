@@ -1,6 +1,7 @@
 package com.example.assignment4.home.presentation.detailsScreen
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,9 +45,11 @@ fun DetailsScreen(sharedViewModel: SharedViewModel) {
     } else {
         Column(
             modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
                 .fillMaxSize()
                 .verticalScroll(scrollState)
                 .padding(16.dp, top = 0.dp, bottom = 30.dp)
+
         ) {
             Text(
                 text = details.name,

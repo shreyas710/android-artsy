@@ -45,7 +45,9 @@ fun ArtworksScreen(sharedViewModel: SharedViewModel) {
 
     if (loader) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
             contentAlignment = Alignment.TopCenter
         ) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.onSurface)
@@ -73,7 +75,10 @@ fun ArtworksScreen(sharedViewModel: SharedViewModel) {
             )
         }
     } else {
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
             items(sharedViewModel.artistArtworks.value.size) { index ->
                 val artwork = sharedViewModel.artistArtworks.value[index]
                 ArtworkCard(artwork, sharedViewModel)
