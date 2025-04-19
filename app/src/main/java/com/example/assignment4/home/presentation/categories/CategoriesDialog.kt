@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.assignment4.home.presentation.categories
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
@@ -44,7 +48,13 @@ import com.example.assignment4.home.data.models.Artwork
 import com.example.assignment4.home.data.models.GeneCategory
 import kotlinx.coroutines.launch
 import androidx.compose.material3.Icon
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
+import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,11 +128,59 @@ fun CategoriesDialog(
 }
 
 @Composable
+fun MarkdownLinkText(
+    text: String,
+    onLinkClick: (String) -> Unit
+) {
+    val annotatedString = buildAnnotatedString {
+        val regex = Regex("""\[(.+?)]\((/[^)]+)\)""")
+        var lastIndex = 0
+
+        regex.findAll(text).forEach { result ->
+            val matchStart = result.range.first
+            val matchEnd = result.range.last + 1
+
+            append(text.substring(lastIndex, matchStart))
+
+            val label = result.groupValues[1]
+            val relativeUrl = result.groupValues[2]
+            val fullUrl = "https://www.artsy.net$relativeUrl"
+
+            pushStringAnnotation(tag = "URL", annotation = fullUrl)
+            withStyle(SpanStyle(color = Color.Blue, textDecoration = TextDecoration.Underline)) {
+                append(label)
+            }
+            pop()
+
+            lastIndex = matchEnd
+        }
+
+        if (lastIndex < text.length) {
+            append(text.substring(lastIndex))
+        }
+    }
+
+    ClickableText(
+        text = annotatedString,
+        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onPrimary),
+        onClick = { offset ->
+            annotatedString.getStringAnnotations(tag = "URL", start = offset, end = offset)
+                .firstOrNull()?.let {
+                    onLinkClick(it.item)
+                }
+        }
+    )
+}
+
+@Composable
 fun CarouselCard(
     title: String,
     description: String,
     imageUrl: String
 ) {
+
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .width(250.dp)
@@ -156,12 +214,10 @@ fun CarouselCard(
                     .height(200.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Justify,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+                MarkdownLinkText(description) { url ->
+                    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+                    context.startActivity(intent)
+                }
             }
         }
     }
